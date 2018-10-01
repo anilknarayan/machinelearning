@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import datetime
-import persistence
+import persistence as ps
 
 df_all_train = pd.read_json('./data/train.json')
 
@@ -55,12 +55,12 @@ if load_from_files == 1:
     
     #pickling one-hot encoded training dataset
     print('START Saving df_all_train to file... ',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    save_obj(df_all_train, "train")
+    ps.save_obj(df_all_train, "train")
     print('DONE Saving df_all_train to file... ',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     
 else:
     print('STARTED Loading from file',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    df_all_train = load_obj('train')
+    df_all_train = ps.load_obj('train')
     print('DONE Loading from file',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     
     
