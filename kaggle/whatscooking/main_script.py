@@ -29,6 +29,8 @@ def one_hot_encode(df_input, unique_ingredients):
             if ingredient in unique_ingredients:
                 X.set_value(index, ingredient, 1)
     
+    X = X.drop(['id', 'ingredients','cuisine'], axis=1)
+
     return X
 
 #print(df_all_train)
@@ -49,37 +51,32 @@ if load_from_files == 1:
     #for index in X.index:
     #    for ingredient in X.iloc[index]['ingredients']:
     #        #print('Setting value of ', ingredient, ' in row with index ', str(index))
-    #        X.set_value(index, ingredient, 1)
-    df_all_train = one_hot_encode(df_all_train, unique_ingredients)
+    #        X.set_value(index, ingredient, 1)    
+    y = df_all_train['cuisine']
+    X = one_hot_encode(df_all_train, unique_ingredients)
     print('Prep and One-hot encoding of df_all_train ENDED... ',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     
     #pickling one-hot encoded training dataset
-    print('START Saving df_all_train to file... ',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    ps.save_obj(df_all_train, "train")
-    print('DONE Saving df_all_train to file... ',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+    print('START Saving X and y to file... ',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+    ps.save_obj(X, "X")
+    ps.save_obj(y, "y")
+    
+    print('DONE Saving X and y to file... ',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     
 else:
     print('STARTED Loading from file',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    df_all_train = ps.load_obj('train')
+    X = ps.load_obj('X')
+    y = ps.load_obj('y')
+    
     print('DONE Loading from file',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     
     
-print(df_all_train.shape)    
-
+print(X.shape)    
+print(y.shape)
 #Look at the training data and remove unnecessary columns
 #pd.set_option('display.max_columns', None)
 #pd.set_option('display.max_rows', None)
-#print(df_all_train.columns)
-
-#print(df_all_train.columns)
-
-y = df_all_train['cuisine']
-df_all_train = df_all_train.drop(['id', 'ingredients','cuisine'], axis=1)
-X = df_all_train
-
-#print(X.head())
-
-#print(y)
+#print(X.columns)
 
 #Split the datasets into a 90% train and 10% test set
 from sklearn.model_selection import train_test_split
@@ -107,5 +104,6 @@ def fit_and_predict_using_classifier(classifier, X_train, X_test, y_train, y_tes
 from sklearn.linear_model import LogisticRegression
 classifier_logistic_regression = LogisticRegression(random_state=0, solver='lbfgs', multi_class='multinomial')
 
-fit_and_predict_using_classifier(classifier_logistic_regression, X_train, X_test, y_train, y_test)
+result = fit_and_predict_using_classifier(classifier_logistic_regression, X_train, X_test, y_train, y_test)
 #{'train_accuracy': 0.889931835959325, 'test_accuracy': 0.7830568124685772}
+print(result)
