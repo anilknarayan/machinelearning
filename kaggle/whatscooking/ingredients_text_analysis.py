@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import re
 
 df_all_train = pd.read_json('./data/train.json')
 
@@ -30,3 +31,11 @@ df.to_csv('./data/unique_ingredients.csv')
 # remove stop words
 # remove words not in lexicon - this should remove most brand names
 # run these and visually inspect the list again to see if it looks better
+
+# Removing all text in-between parenthesis -
+def remove_strings_in_parentheses(s):
+    regex = r'\(([^()]*)\)'
+
+    return re.sub(regex, '', s).replace('  ', ' ')
+
+
