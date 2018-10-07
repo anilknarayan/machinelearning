@@ -19,8 +19,9 @@ def remove_trademarked_words(s):
     return re.sub(regex, '', s)
 
 def remove_non_numeric_and_non_alphabetic_characters(s):
-    regex = '[^\w^\s]'
-    return re.sub(regex, '', s)
+    regex = '[^\w^\s^-]'
+    intermediate = re.sub(regex, '', s)
+    return intermediate.replace('-', ' ')
 
 def space_separated_list_of_cleaned_ingredients(ingredients):
     cleaned_ingredients = []
