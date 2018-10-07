@@ -30,28 +30,21 @@ def space_separated_list_of_cleaned_ingredients(ingredients):
         cleaned_ingredient = remove_trademarked_words(cleaned_ingredient)
         cleaned_ingredient = remove_non_numeric_and_non_alphabetic_characters(cleaned_ingredient)
         cleaned_ingredient = re.sub(r'[\s]+', ' ', cleaned_ingredient)
+        cleaned_ingredient = cleaned_ingredient.lower()
         for sub_ingredient in cleaned_ingredient.split(' '):
             if len(sub_ingredient) > 2:
                 cleaned_ingredients.append(sub_ingredient)
     return ' '.join(cleaned_ingredients)
 
-#test_string = 'What if (and this is a big if) you had as many as 4 developers (maybe even 5 developers) reporting to you.'
-test_string = 'I stopped using 2% reduced fat milk. Now I use 1% reduced fat milk. That has mademe 99% healthier.'
+def pretty_print_list(l):
+    return '[ {} ]'.format( ', '.join(l) )
 
-
-print(test_string2)
-
-#print(remove_percentages(test_string))
-#sheepâ€™s milk cheese
-#Zatarainâ€™s Jambalaya Mix
-#Breakstoneâ€™s Sour Cream
-
-trademark_symbol = u"\u2122"
+#print(pretty_print_list(['1','2','3','4']))
 
 df = pd.read_json('./data/train.json')
-df = df.head(20)
+#df = df.head(20)
 
 for ingredients_array in df.ingredients:
     #ingredient = ingredient.replace('purÃ©e','puree')
     modified_ingredients_string = space_separated_list_of_cleaned_ingredients(ingredients_array)
-    print(*ingredients_array + ' -->' + modified_ingredients_string)
+    print('{0} --> {1}'.format(pretty_print_list(ingredients_array), modified_ingredients_string), file=open('./data/ingredient_preprocessing.csv', 'a'))
