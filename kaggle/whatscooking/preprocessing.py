@@ -11,6 +11,8 @@ list
 
 import pandas as pd
 import numpy as np
+import nltk
+from nltk.stem.porter import PorterStemmer
 
 '''Remove strings in parenthesis'''
 def remove_strings_in_parentheses(s):
@@ -34,6 +36,8 @@ def remove_non_numeric_and_non_alphabetic_characters(s):
     return intermediate.replace('-', ' ')
 
 def space_separated_list_of_cleaned_ingredients(ingredients):
+    porter_stemmer = PorterStemmer()
+
     cleaned_ingredients = []
     for ingredient in ingredients:
         cleaned_ingredient = remove_strings_in_parentheses(ingredient)
@@ -44,7 +48,7 @@ def space_separated_list_of_cleaned_ingredients(ingredients):
         cleaned_ingredient = cleaned_ingredient.lower()
         for sub_ingredient in cleaned_ingredient.split(' '):
             if len(sub_ingredient) > 2:
-                cleaned_ingredients.append(sub_ingredient)
+                cleaned_ingredients.append(porter_stemmer.stem(sub_ingredient))
     return ' '.join(cleaned_ingredients)
 
 def pretty_print_list(l):

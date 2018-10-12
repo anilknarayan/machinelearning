@@ -71,8 +71,8 @@ else:
     print('DONE Loading from file',datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     
     
-print(X.shape)    
-print(y.shape)
+#print(X.shape)    
+#print(y.shape)
 #Look at the training data and remove unnecessary columns
 #pd.set_option('display.max_columns', None)
 #pd.set_option('display.max_rows', None)
